@@ -1,30 +1,33 @@
-use std::{env, sync::Arc};
+use std::env;
 
 use actix_cors::Cors;
-use actix_web::{
-    get, middleware, route,
-    web::{self, Data},
-    App, HttpRequest, HttpResponse, HttpServer, Responder,
-};
+use actix_web::{get, middleware, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use anyhow::Result;
+use async_graphql::connection::EmptyFields;
+use async_graphql::{extensions::Extension, EmptyMutation};
+use async_graphql::{EmptySubscription, Schema};
+use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
 use sea_orm::{entity::*, query::*, DatabaseConnection};
 
+mod db;
 mod entity;
+
+use db::State;
 
 use entity::prelude::*;
 
-#[derive(Clone)]
-pub struct State {
-    conn: DatabaseConnection,
-}
+type AppSchema = Schema<Query, EmptyMutation, EmptySubscription>;
+
+#[derive(async_graphql::MergedObject, Default)]
+pub struct Query(String);
 
 #[get("/")]
-async fn index(req: HttpRequest, data: web::Data<State>) -> impl Responder {
-    if let Ok(users) = User::find().all(&data.conn).await {
-        HttpResponse::Ok().body(users.len().to_string())
-    } else {
-        HttpResponse::InternalServerError().body("Error Looking up".to_string())
-    }
+async fn index(_req: HttpRequest, data: web::Data<State>) -> impl Responder {
+    ""
+}
+
+async fn graphql_handler(_req: HttpRequest) -> impl Responder {
+    "hi"
 }
 
 #[tokio::main]
@@ -36,8 +39,15 @@ async fn main() -> Result<()> {
     let db_url = env::var("DATABASE_URL")?;
 
     let conn = sea_orm::Database::connect(&db_url).await?;
+    let schema = Schema::build(
+        Query::default(),
+        EmptyMutation::default(),
+        EmptySubscription::default(),
+    )
+    .data(conn)
+    .finish();
 
-    let state = State { conn };
+    let state = State::new(schema);
 
     log::info!("Starting HTTP server...");
 
@@ -45,6 +55,11 @@ async fn main() -> Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::new(state.clone()))
+            .service(
+                web::resource("/graphql")
+                    .route(web::get().to(graphql_handler))
+                    .route(web::post().to(graphql_handler)),
+            )
             .service(index)
             .wrap(Cors::permissive())
             .wrap(middleware::Logger::default())
