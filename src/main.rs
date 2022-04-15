@@ -27,7 +27,7 @@ async fn index(req: HttpRequest, data: web::Data<State>) -> impl Responder {
     }
 }
 
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> Result<()> {
     std::env::set_var("RUST_LOG", "debug");
     tracing_subscriber::fmt::init();
