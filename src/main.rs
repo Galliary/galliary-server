@@ -1,33 +1,27 @@
 use std::env;
 
 use actix_cors::Cors;
-use actix_web::{get, middleware, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{App, get, HttpServer, middleware, Responder, web};
 use anyhow::Result;
-use async_graphql::connection::EmptyFields;
-use async_graphql::{extensions::Extension, EmptyMutation};
 use async_graphql::{EmptySubscription, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
-use sea_orm::{entity::*, query::*, DatabaseConnection};
+
+use db::State;
 
 mod db;
 mod entity;
 
-use db::State;
+mod controllers;
 
-use entity::prelude::*;
-
-type AppSchema = Schema<Query, EmptyMutation, EmptySubscription>;
-
-#[derive(async_graphql::MergedObject, Default)]
-pub struct Query(String);
+type AppSchema = Schema<controllers::Query, controllers::Mutation, EmptySubscription>;
 
 #[get("/")]
-async fn index(_req: HttpRequest, data: web::Data<State>) -> impl Responder {
-    ""
+async fn index() -> impl Responder {
+    "use /graphql"
 }
 
-async fn graphql_handler(_req: HttpRequest) -> impl Responder {
-    "hi"
+async fn graphql_handler(req: GraphQLRequest, data: web::Data<State>) -> GraphQLResponse {
+    data.schema.execute(req.into_inner()).await.into()
 }
 
 #[tokio::main]
@@ -40,8 +34,8 @@ async fn main() -> Result<()> {
 
     let conn = sea_orm::Database::connect(&db_url).await?;
     let schema = Schema::build(
-        Query::default(),
-        EmptyMutation::default(),
+        controllers::Query::default(),
+        controllers::Mutation::default(),
         EmptySubscription::default(),
     )
     .data(conn)

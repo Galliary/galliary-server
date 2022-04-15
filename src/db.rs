@@ -1,5 +1,3 @@
-use sea_orm::DatabaseConnection;
-
 use crate::AppSchema;
 
 #[derive(Clone)]

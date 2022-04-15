@@ -3,8 +3,9 @@
 use super::sea_orm_active_enums::LockingStatus;
 use super::sea_orm_active_enums::SafetyRating;
 use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "Category")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
