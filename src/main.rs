@@ -12,15 +12,6 @@ use sea_orm::{entity::*, query::*, DatabaseConnection};
 mod entity;
 
 use entity::prelude::*;
-use serde_json::json;
-// use juniper::http::GraphQLRequest;
-
-// #[route("/graphql", method = "GET", method = "POST")]
-// async fn graphql(st: web::Data<Schema>, data: web::Json<GraphQLRequest>) -> impl Responder {
-//     let connection = lib::connect();
-//     let user = data.execute(&st, &connection).await;
-//     HttpResponse::Ok().json(user)
-// }
 
 #[derive(Clone)]
 pub struct State {
@@ -32,7 +23,7 @@ async fn index(req: HttpRequest, data: web::Data<State>) -> impl Responder {
     if let Ok(users) = User::find().all(&data.conn).await {
         HttpResponse::Ok().body(users.len().to_string())
     } else {
-        HttpResponse::NotFound().body("Error Looking up".to_string())
+        HttpResponse::InternalServerError().body("Error Looking up".to_string())
     }
 }
 
