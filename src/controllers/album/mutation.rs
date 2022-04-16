@@ -16,8 +16,8 @@ impl AlbumMutation {
         let db = ctx.data::<DatabaseConnection>()?;
 
         let album = album::ActiveModel {
-            id: Set(album_create_request.id.to_owned()),
-            title: Set(album_create_request.title.to_owned()),
+            id: Set(album_create_request.id),
+            title: Set(album_create_request.title),
             ..Default::default()
         };
 
