@@ -1,15 +1,18 @@
-use async_graphql::{Context, Object, Result};
-use sea_orm::{DatabaseConnection, Set};
-use sea_orm::EntityTrait;
-use crate::controllers::album::types::{CreateAlbumInput};
+use crate::controllers::album::types::CreateAlbumInput;
 use crate::entity::album;
+use async_graphql::{Context, Object, Result};
+use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
 #[derive(Default)]
 pub struct AlbumMutation;
 
 #[Object]
 impl AlbumMutation {
-    async fn create_album(&self, ctx: &Context<'_>, album_create_request: CreateAlbumInput) -> Result<bool> {
+    async fn create_album(
+        &self,
+        ctx: &Context<'_>,
+        album_create_request: CreateAlbumInput,
+    ) -> Result<bool> {
         let db = ctx.data::<DatabaseConnection>()?;
 
         let album = album::ActiveModel {
@@ -18,9 +21,6 @@ impl AlbumMutation {
             ..Default::default()
         };
 
-        match album::Entity::insert(album).exec(db).await {
-            Ok(_) => Ok(true),
-            Err(err) => Err(err.into()),
-        }
+        Ok(album::Entity::insert(album).exec(db).await.is_ok())
     }
 }

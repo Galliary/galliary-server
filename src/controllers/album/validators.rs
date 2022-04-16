@@ -22,7 +22,9 @@ pub struct AlbumDescriptionValidator;
 impl CustomValidator<String> for AlbumDescriptionValidator {
     fn check(&self, value: &String) -> Result<(), String> {
         if value.len() > ALBUM_DESCRIPTION_MAX_LENGTH {
-            return Err(String::from("Album description must be less than 200 characters"));
+            return Err(String::from(
+                "Album description must be less than 200 characters",
+            ));
         }
         Ok(())
     }

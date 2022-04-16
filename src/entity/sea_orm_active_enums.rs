@@ -4,8 +4,9 @@ use async_graphql::*;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, PartialEq, EnumIter, DeriveActiveEnum, Serialize, Deserialize)]
-#[derive(Enum, Copy, Eq)]
+#[derive(
+    Debug, Clone, PartialEq, EnumIter, DeriveActiveEnum, Serialize, Deserialize, Enum, Copy, Eq,
+)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "SafetyRating")]
 pub enum SafetyRating {
     #[sea_orm(string_value = "MATURE")]
@@ -19,8 +20,9 @@ pub enum SafetyRating {
     #[sea_orm(string_value = "UNKNOWN")]
     Unknown,
 }
-#[derive(Debug, Clone, PartialEq, EnumIter, DeriveActiveEnum, Serialize, Deserialize)]
-#[derive(Enum, Copy, Eq)]
+#[derive(
+    Debug, Clone, PartialEq, EnumIter, DeriveActiveEnum, Serialize, Deserialize, Enum, Copy, Eq,
+)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "LockingStatus")]
 pub enum LockingStatus {
     #[sea_orm(string_value = "HIDDEN")]

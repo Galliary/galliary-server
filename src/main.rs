@@ -1,7 +1,7 @@
 use std::env;
 
 use actix_cors::Cors;
-use actix_web::{App, get, HttpServer, middleware, Responder, web};
+use actix_web::{get, middleware, web, App, HttpServer, Responder};
 use anyhow::Result;
 use async_graphql::{EmptySubscription, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};

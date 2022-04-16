@@ -2,8 +2,8 @@
 
 use super::sea_orm_active_enums::LockingStatus;
 use super::sea_orm_active_enums::SafetyRating;
-use sea_orm::entity::prelude::*;
 use async_graphql::*;
+use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize, SimpleObject)]

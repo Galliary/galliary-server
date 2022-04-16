@@ -1,5 +1,5 @@
-use album::query::AlbumQuery;
 use crate::controllers::album::mutation::AlbumMutation;
+use album::query::AlbumQuery;
 
 // Controllers
 pub mod album;
@@ -11,4 +11,3 @@ pub struct Query(AlbumQuery);
 // Mutation
 #[derive(async_graphql::MergedObject, Default)]
 pub struct Mutation(AlbumMutation);
-
