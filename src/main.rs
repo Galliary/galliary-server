@@ -41,14 +41,14 @@ async fn main() -> Result<()> {
     .data(conn)
     .finish();
 
-    let state = State::new(schema);
+    let state = web::Data::new(State::new(schema));
 
     log::info!("Starting HTTP server...");
 
     // Start HTTP server
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(state.clone()))
+            .app_data(state.clone())
             .service(
                 web::resource("/graphql")
                     .route(web::get().to(graphql_handler))
