@@ -2,11 +2,13 @@
 
 use super::sea_orm_active_enums::LockingStatus;
 use super::sea_orm_active_enums::SafetyRating;
+use async_graphql::SimpleObject;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Serialize, Deserialize, SimpleObject)]
 #[sea_orm(table_name = "Image")]
+#[graphql(name = "Image")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
     pub id: String,

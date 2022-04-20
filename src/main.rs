@@ -6,14 +6,7 @@ use anyhow::Result;
 use async_graphql::{EmptySubscription, Schema};
 use async_graphql_actix_web::{GraphQLRequest, GraphQLResponse};
 
-use db::State;
-
-mod db;
-mod entity;
-
-mod controllers;
-
-type AppSchema = Schema<controllers::Query, controllers::Mutation, EmptySubscription>;
+use galliary::{controllers, State};
 
 #[get("/")]
 async fn index() -> impl Responder {

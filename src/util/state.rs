@@ -1,4 +1,7 @@
-use crate::AppSchema;
+use crate::controllers::{Mutation, Query};
+use async_graphql::{EmptySubscription, Schema};
+
+type AppSchema = Schema<Query, Mutation, EmptySubscription>;
 
 #[derive(Clone)]
 pub struct State {

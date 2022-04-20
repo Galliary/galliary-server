@@ -1,4 +1,4 @@
-use crate::controllers::album::types::CreateAlbumInput;
+use super::types::CreateAlbum;
 use crate::entity::album;
 use async_graphql::{Context, Object, Result};
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
@@ -11,7 +11,7 @@ impl AlbumMutation {
     async fn create_album(
         &self,
         ctx: &Context<'_>,
-        album_create_request: CreateAlbumInput,
+        album_create_request: CreateAlbum,
     ) -> Result<bool> {
         let db = ctx.data::<DatabaseConnection>()?;
 

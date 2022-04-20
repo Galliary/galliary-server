@@ -2,7 +2,7 @@
 
 use super::sea_orm_active_enums::LockingStatus;
 use super::sea_orm_active_enums::SafetyRating;
-use async_graphql::*;
+use async_graphql::SimpleObject;
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 

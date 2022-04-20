@@ -1,10 +1,10 @@
 use async_graphql::InputObject;
 
-use crate::controllers::album::validators::{AlbumDescriptionValidator, AlbumTitleValidator};
+use super::validators::{AlbumDescriptionValidator, AlbumTitleValidator};
 use crate::entity::sea_orm_active_enums::{LockingStatus, SafetyRating};
 
 #[derive(InputObject)]
-pub struct CreateAlbumInput {
+pub struct CreateAlbum {
     pub id: String,
     #[graphql(validator(custom = "AlbumTitleValidator"))]
     pub title: Option<String>,

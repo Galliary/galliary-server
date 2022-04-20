@@ -6,7 +6,6 @@ const ALBUM_TITLE_MIN_LENGTH: usize = 3;
 const ALBUM_DESCRIPTION_MAX_LENGTH: usize = 200;
 
 pub struct AlbumTitleValidator;
-
 impl CustomValidator<String> for AlbumTitleValidator {
     fn check(&self, value: &String) -> Result<(), String> {
         if value.len() > ALBUM_TITLE_MAX_LENGTH {
