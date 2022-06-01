@@ -1,15 +1,14 @@
-use crate::controllers::{Mutation, Query};
-use async_graphql::{EmptySubscription, Schema};
+use async_graphql::{EmptyMutation, EmptySubscription, Schema};
 
-type AppSchema = Schema<Query, Mutation, EmptySubscription>;
+// type AppSchema = Schema<Default::default(), EmptyMutation, EmptySubscription>;
 
-#[derive(Clone)]
 pub struct State {
-    pub schema: AppSchema,
+    // pub schema: AppSchema,
 }
 
 impl State {
-    pub fn new(schema: AppSchema) -> Self {
-        Self { schema }
+    pub fn new() -> Self {
+        Self {}
+        // Self { schema }
     }
 }

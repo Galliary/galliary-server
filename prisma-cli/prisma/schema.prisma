@@ -6,6 +6,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "cargo r"
+  output = "src/prisma.rs"
+}
 
 
 // --------------------------------------
@@ -153,7 +157,7 @@ model User {
 model UserConnection {
   // https://github.com/SeaQL/sea-orm/issues/126#issuecomment-912725227
   id String @id @default(cuid())
-  type UserConnectionType
+  kind UserConnectionType
 
   email        String
   handle       String? // The linkable profile connection handle
@@ -168,7 +172,7 @@ model UserConnection {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  @@unique([email, type])
+  @@unique([email, kind])
 }
 
 model Session {
@@ -193,14 +197,14 @@ model Token {
   updatedAt DateTime @updatedAt
 
   hashedToken String
-  type        String
+  kind        String
   expiresAt   DateTime
   sentTo      String
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  @@unique([hashedToken, type])
+  @@unique([hashedToken, kind])
 }
 
 model Category {
